@@ -1,17 +1,3 @@
-// ============================================================
-// Week 2 Example 2: Platformer with Platforms Array
-// ============================================================
-
-// ------------------------------------------------------------
-// PLATFORMS ARRAY
-// Each platform is an object with x, y, width, and height.
-// x and y are the TOP-LEFT corner (same as rect()).
-//
-// Storing platforms in an array means:
-//   - We can loop through all of them with one for loop
-//   - Adding a new platform = adding one line of data
-//   - Later we can load this data from a JSON file instead
-// ------------------------------------------------------------
 let platforms = [
   // { x, y, w, h }
   { x: 0, y: 400, w: 800, h: 40 }, // ground (full width floor)
@@ -31,10 +17,6 @@ let platforms = [
   }, // moving platform
 ];
 
-// ------------------------------------------------------------
-// PLAYER OBJECT — same structure as Example 1
-// w and h are added here for use in collision detection.
-// ------------------------------------------------------------
 let player = {
   x: 100,
   y: 100,
@@ -53,39 +35,21 @@ let player = {
   onGround: false, // tracks whether the player is standing on something
 };
 
-// ------------------------------------------------------------
-// PHYSICS CONSTANTS
-// Defined outside the player object so they can be shared
-// across multiple objects (e.g. enemies)
-// ------------------------------------------------------------
-const GRAVITY = 0.6; // downward force added to vy every frame
+const GRAVITY = 0.6;
 
-// Platform colour stored as an array so it can be reused easily
-const PLATFORM_COLOR = [255, 160, 50, 0]; // warm orange
+const PLATFORM_COLOR = [255, 160, 50, 0]; // transparent
 
 function preload() {
   mountainImg = loadImage("assets/images/mountainbg.jpg");
   playerImg = loadImage("assets/images/goat.png");
 }
 
-// ============================================================
-// setup()
-// Runs once at the very start of the sketch.
-// Sets up the canvas and positions the player on the ground.
-// ============================================================
 function setup() {
   createCanvas(800, 450);
 
-  // Place player on top of the ground platform (index 0 in the array)
   player.y = platforms[0].y - player.r;
 }
 
-// ============================================================
-// draw()
-// Runs repeatedly in a loop after setup() finishes.
-// Each frame we clear the background, handle input,
-// apply physics, resolve collisions, and draw everything.
-// ============================================================
 function draw() {
   background(mountainImg);
 
@@ -115,14 +79,6 @@ function movePlatforms() {
   }
 }
 
-// ------------------------------------------------------------
-// handleInput()
-// Checks which keys are held down this frame and updates
-// the player's velocity accordingly.
-// keyIsDown() returns true as long as the key is held —
-// unlike keyPressed(), which only fires once per press.
-// We check both arrow keys and WASD so either works.
-// ------------------------------------------------------------
 function handleInput() {
   // --- Horizontal movement ---
   if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
@@ -134,13 +90,8 @@ function handleInput() {
     player.vx += player.speed;
   }
 
-  // --- Clamp horizontal speed ---
-  // constrain(value, min, max) keeps a value within a range.
-  // Without this, holding a key forever would accelerate infinitely.
   player.vx = constrain(player.vx, -player.maxSpeed, player.maxSpeed);
 
-  // --- Apply friction when no horizontal key is pressed ---
-  // Multiplying by a value less than 1 gradually slows the player down.
   if (
     !keyIsDown(LEFT_ARROW) &&
     !keyIsDown(65) &&
@@ -150,9 +101,6 @@ function handleInput() {
     player.vx *= player.friction;
   }
 
-  // --- Jump ---
-  // The player can only jump when standing on the ground (onGround = true).
-  // This prevents jumping again mid-air.
   if ((keyIsDown(UP_ARROW) || keyIsDown(87)) && player.onGround) {
     // UP or W
     player.vy = player.jumpForce;
@@ -160,14 +108,6 @@ function handleInput() {
   }
 }
 
-// ------------------------------------------------------------
-// applyPhysics()
-// Each frame we:
-//   1. Add gravity to vertical velocity (vy)
-//   2. Move the player by its velocity (vx, vy)
-//   3. Reset onGround so collision can set it again
-//   4. Handle falling off the bottom of the canvas
-// ------------------------------------------------------------
 function applyPhysics() {
   // 1. Apply gravity — pulls the player down every frame
   player.vy += GRAVITY;
@@ -191,20 +131,6 @@ function applyPhysics() {
   player.onGround = false;
 }
 
-// ------------------------------------------------------------
-// resolvePlatformCollisions()
-// Loops through every platform and checks if the player
-// is landing on top of it.
-//
-// The collision check asks three questions:
-//   1. Is the player horizontally overlapping the platform?
-//   2. Is the player falling downward (vy >= 0)?
-//   3. Is the player's bottom at or below the platform top?
-//
-// If all three are true, we snap the player to sit on top.
-// This top-only check means the player can jump through
-// platforms from below, which is a common platformer pattern.
-// ------------------------------------------------------------
 function resolvePlatformCollisions() {
   for (let i = 0; i < platforms.length; i++) {
     let p = platforms[i];
@@ -236,12 +162,6 @@ function resolvePlatformCollisions() {
   }
 }
 
-// ------------------------------------------------------------
-// drawPlatforms()
-// Loops through the platforms array and draws each one.
-// This is the same loop pattern used to draw any collection
-// of objects — enemies, coins, tiles, etc.
-// ------------------------------------------------------------
 function drawPlatforms() {
   noStroke();
 
@@ -262,13 +182,6 @@ function drawPlatforms() {
   }
 }
 
-// ------------------------------------------------------------
-// drawPlayer()
-// The blob is drawn as a polygon using noise() to offset
-// each vertex slightly, creating an organic wobble effect.
-// push() and pop() save and restore drawing settings so
-// styles set here don't affect other drawing functions.
-// ------------------------------------------------------------
 function drawPlayer() {
   push(); // save current drawing settings
 
@@ -279,12 +192,6 @@ function drawPlayer() {
   pop(); // restore drawing settings
 }
 
-// ------------------------------------------------------------
-// drawHUD()
-// HUD = Heads Up Display.
-// Shows controls on screen so the player always knows
-// how to interact without needing external instructions.
-// ------------------------------------------------------------
 function drawHUD() {
   fill(0, 0, 0);
   noStroke();
