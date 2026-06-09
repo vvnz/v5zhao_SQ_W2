@@ -25,8 +25,9 @@ The console will show any errors in your sketch.
 
 ## Assets
 
-| File | Source |
-| assets/images/goat.png | AI generated [1] |
+| File                         | Source                         |
+| ---------------------------- | ------------------------------ |
+| assets/images/goat.png       | AI generated [1]               |
 | assets/images/mountainbg.jpg | By Superposition Principle [2] |
 
 ## References
