@@ -27,8 +27,8 @@ The console will show any errors in your sketch.
 
 | File                         | Source                         |
 | ---------------------------- | ------------------------------ |
-| assets/images/goat.png       | AI generated [1]               |
-| assets/images/mountainbg.jpg | By Superposition Principle [2] |
+| assets/images/goat.png       | [1] AI generated               |
+| assets/images/mountainbg.jpg | [2] By Superposition Principle |
 
 ## References
 
